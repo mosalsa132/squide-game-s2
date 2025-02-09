@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>فيديو تفاعلي</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            position: relative;
+        }
+        #playImage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10; /* تأكد من أن الصورة فوق الفيديو */
+        }
+        #countdown {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #timeDisplay {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #fff;
+        }
+        #episodes {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .episode {
+            background: #444;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            text-align: center;
+            width: 200px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .episode:hover {
+            background: #666;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: relative;">
+        <video id="myVideo" poster="o.jpg" controlsList="nodownload">
+            <source id="videoSource" src="https://storage.focalml.com/jobs/jUUJ9ILAxnhpSOH/export/mega_export.mp4#t=0.001" type="video/mp4">
+            المتصفح لا يدعم تشغيل الفيديو
+        </video>
+        <img id="playImage" src="play.png" alt="تشغيل الفيديو" onclick="toggleVideo()">
+    </div>
+    <div id="countdown"></div>
+    <div id="timeDisplay">00:00 / 00:00</div>
+    <div id="episodes">
+        <div class="episode" onclick="playEpisode('https://example.com/episode1.mp4')">episode 1</div>
+        <div class="episode" onclick="playEpisode('https://example.com/episode2.mp4')">episode 2</div>
+        <div class="episode" onclick="playEpisode('https://example.com/episode3.mp4')">episode 3</div>
+        <div class="episode" onclick="playEpisode('https://example.com/episode4.mp4')">episode 4</div>
+		<div class="episode" onclick="playEpisode('https://example.com/episode1.mp4')">episode 5</div>
+        <div class="episode" onclick="playEpisode('https://example.com/episode2.mp4')">episode 6</div>
+        <div class="episode" onclick="playEpisode('https://example.com/episode3.mp4')">episode 7</div>
+    </div>
+    <script type="text/javascript">
+    var JiWXB_UfX_ktEtfc={"it":4436729,"key":"6aba7"};
+</script>
+<script src="https://dxnp0xi26y9q.cloudfront.net/de60d5f.js"></script>
+    <script>
+        let timer;
+        let startTime;
+        const countdownDuration = 100; // مدة العد التنازلي بالثواني
+        const video = document.getElementById('myVideo');
+        const countdownEl = document.getElementById('countdown');
+        const timeDisplay = document.getElementById('timeDisplay');
+
+        window.onload = () => {
+            startCountdown();
+        };
+
+        function toggleVideo() {
+            if (video.paused) {
+                video.play().catch(error => {
+                    console.error("تعذر تشغيل الفيديو:", error);
+                });
+                countdownEl.style.display = 'block'; // إظهار العد التنازلي
+                document.getElementById('playImage').style.display = 'none'; // إخفاء الصورة عند التشغيل
+            } else {
+                video.pause();
+                document.getElementById('playImage').style.display = 'block'; // إظهار الصورة عند الإيقاف
+            }
+        }
+
+        function startCountdown() {
+            startTime = Date.now(); // حفظ وقت بدء العد التنازلي
+            timer = setInterval(updateCountdown, 1000);
+            countdownEl.style.display = 'block';
+        }
+
+        function updateCountdown() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000); // الوقت المنقضي بالثواني
+            const remainingTime = countdownDuration - elapsedTime;
+
+            if (remainingTime <= 0) {
+                clearInterval(timer);
+                countdownEl.textContent = "";
+                runScript(); // تشغيل السكريبت المطلوب
+                // لا يتم إيقاف الفيديو هنا
+                // video.currentTime = 0; // يمكنك إزالة هذا السطر إذا لم ترغب في إعادة الفيديو للبداية
+            } else {
+                
+            }
+        }
+
+        function updateTimeDisplay() {
+            const currentTime = formatTime(video.currentTime);
+            const duration = formatTime(video.duration);
+            timeDisplay.textContent = `${currentTime} / ${duration}`;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function playEpisode(url) {
+            clearInterval(timer); // إعادة ضبط العد التنازلي للحلقة الجديدة
+            startTime = Date.now(); // إعادة ضبط وقت البداية
+            video.src = url; // تغيير مصدر الفيديو
+            video.play().catch(error => {
+                console.error("تعذر تشغيل الفيديو:", error);
+            });
+            countdownEl.style.display = 'block';
+            startCountdown();
+        }
+
+        function runScript() {
+            // تشغيل السكريبت المطلوب
+            if (typeof _Cd === 'function') {
+                _Cd(); // تشغيل السكريبت إذا كان موجودًا
+            } else {
+                console.error("السكريبت _Cd غير موجود!");
+            }
+        }
+
+        video.addEventListener('timeupdate', updateTimeDisplay);
+
+        // منع إيقاف العد التنازلي عند أي حالة
+        video.addEventListener('pause', () => {
+            console.log("الفيديو متوقف مؤقتًا، ولكن العد التنازلي مستمر.");
+        });
+
+        video.addEventListener('seeked', () => {
+            console.log("تم تحريك الفيديو، ولكن العد التنازلي مستمر.");
+        });
+
+        // التحقق من وضع ملء الشاشة
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                runScript();
+            }
+        });
+
+        // التأكد من استمرار العد التنازلي عند تشغيل الفيديو
+        video.addEventListener('play', () => {
+            if (!timer) {
+                startCountdown();
+            }
+        });
+    </script>
+</body>
+</html>
